@@ -10,5 +10,6 @@ dependencies = [
     "google-auth-httplib2>=0.3.0",
     "google-auth-oauthlib>=1.3.0",
     "py-trello>=0.20.1",
+    "pygithub>=2.8.1",
     "python-dotenv>=1.2.2",
 ]

@@ -55,7 +55,7 @@ def _get_calendar_client():
 
 
 # ---------------------
-# |     INIT TOOLS    |
+# |   TRELLO TOOLS    |
 # ---------------------
 def add_task(name: str, desc: str, due: str, list_name: str = LIST_TODO, board_name: str = BOARD_NAME):
     """Add a task to a Trello board.
@@ -97,3 +97,14 @@ def add_task(name: str, desc: str, due: str, list_name: str = LIST_TODO, board_n
     except Exception as e:
         log.error(f"Failed to add task: {e}", exc_info=True)
         raise
+
+# TODO
+# ---------------------
+# |  CALENDAR TOOLS   |
+# ---------------------
+
+
+# TODO
+# ---------------------
+# |   GITHUB TOOLS    |
+# ---------------------

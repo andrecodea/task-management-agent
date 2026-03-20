@@ -1,5 +1,5 @@
 from google.adk.agents.llm_agent import Agent
-from tools import add_task
+from .tools import add_task
 from datetime import datetime
 
 import logging
@@ -14,7 +14,8 @@ BOARD_NAME = "Tarefas"
 
 # Loader function
 def _load_prompt(filename:str) -> str:
-    with open(filename, 'r', encoding='utf-8') as file:
+    path = os.path.join(os.path.dirname(__file__), filename)
+    with open(path, 'r', encoding='utf-8') as file:
         return file.read()
 
 try:
