@@ -59,6 +59,11 @@ On first run, a browser window will open to authorize Google Calendar access. Th
 - [ ] `update_event` — update event details
 - [ ] `delete_event` — delete an event
 
+### GitHub Integration
+- [ ] `create_issue` — create a GitHub issue and add corresponding Trello card
+- [ ] `create_pull_request` — open a PR linking the resolved issue
+- [ ] `close_issue` — close issue when task is completed
+
 ### Agent
 - [x] Natural language task management via ADK
 - [x] External prompt loaded from `instructions.md`
