@@ -18,8 +18,9 @@ The agent understands natural language commands and executes actions on Trello a
 - **Runtime**: Python 3.13+, [uv](https://github.com/astral-sh/uv)
 - **Agent Framework**: [Google ADK](https://github.com/google/adk-python)
 - **LLM**: Gemini 2.5 Flash
-- **Trello**: [py-trello](https://github.com/sarumont/py-trello)
-- **Google Calendar**: google-api-python-client
+- **Trello**: MCP server
+- **Google Calendar**: MCP server (official Google)
+- **GitHub**: MCP server
 
 ## Setup
 
@@ -59,10 +60,18 @@ On first run, a browser window will open to authorize Google Calendar access. Th
 - [ ] `update_event` — update event details
 - [ ] `delete_event` — delete an event
 
-### GitHub Integration
+### GitHub Integration (via MCP)
 - [ ] `create_issue` — create a GitHub issue and add corresponding Trello card
 - [ ] `create_pull_request` — open a PR linking the resolved issue
 - [ ] `close_issue` — close issue when task is completed
+
+### MCP Migration
+- [ ] Replace Trello client with MCP server
+- [ ] Replace Google Calendar client with official Google MCP server
+- [ ] Configure GitHub MCP server
+
+### Skills
+- [ ] `daily_briefing` — combines tasks and events into a single morning summary
 
 ### Agent
 - [x] Natural language task management via ADK
