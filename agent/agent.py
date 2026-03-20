@@ -1,5 +1,13 @@
 from google.adk.agents.llm_agent import Agent
-from .tools import add_task
+
+from .tools import (
+add_task,
+list_tasks, 
+move_task, 
+archive_task, 
+complete_task
+)
+
 from datetime import datetime
 
 import logging
@@ -24,7 +32,7 @@ except FileNotFoundError as e:
     log.error(e)
     raise
 
-tools = [add_task]
+tools = [add_task, list_tasks, move_task, archive_task, complete_task]
 
 current_date = datetime.now()
 

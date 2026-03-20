@@ -57,7 +57,7 @@ def _get_calendar_client():
 # ---------------------
 # |   TRELLO TOOLS    |
 # ---------------------
-def add_task(name: str, desc: str, due: str, list_name: str = LIST_TODO, board_name: str = BOARD_NAME):
+def add_task(name: str, desc: str, due: str, list_name: str = LIST_TODO, board_name: str = BOARD_NAME) -> str:
     """Add a task to a Trello board.
     
     Use this function to add a task to a trello list.
@@ -67,6 +67,7 @@ def add_task(name: str, desc: str, due: str, list_name: str = LIST_TODO, board_n
         desc: task description.
         due: task's due date.
         list_name: name of the list the task is contained in.
+        board_name: name of the board the list is contained in.
     
     Returns
         confirmation (str): confirmation of task addition.
@@ -96,6 +97,136 @@ def add_task(name: str, desc: str, due: str, list_name: str = LIST_TODO, board_n
         return confirmation
     except Exception as e:
         log.error(f"Failed to add task: {e}", exc_info=True)
+        raise
+
+def list_tasks(board_name: str = BOARD_NAME) -> str:
+    """List tasks in a Trello list.
+    
+    Use this function to list tasks in a trello board list.
+
+    Args
+        board_name: name of the board the list is contained in.
+    
+    Returns
+        str: task names. 
+    """
+    try:
+        log.info("[AGENT] Using list_tasks tool...")
+        client = _get_trello_client()
+
+        board = next((board for board in client.list_boards() if board.name == board_name), None)
+        if not board:
+            return f'Board "{board_name}" not found.'
+
+        result = []
+        for list_name in [LIST_TODO, LIST_IN_PROGRESS, LIST_DONE]:
+            current_list = next((l for l in board.list_lists() if l.name == list_name), None)
+            if not current_list:
+                result.append("Unknown list.")
+                continue
+            cards = current_list.list_cards()
+            result.append(f"\n{list_name}:")
+            result += [f"- [{card.id}] {card.name}" for card in cards]
+        return f"Board: {board_name}\n" + "\n".join(result)
+    except Exception as e:
+        log.error(f"Failed to list tasks: {e}", exc_info=True)
+        raise
+
+def move_task(card_id: str, list_name:str, board_name:str = BOARD_NAME) -> str:
+    """Move a task from a list to another.
+    
+    Use this function to move tasks across lists in a trello board.
+
+    Args
+        board_name: name of the board the list is contained in.
+        list_name: name of the list the task is supposed to go to.
+        card_id: the card's unique identifier.
+    
+    Returns
+        confirmation (str): confirmation of changes. 
+    """
+    try:
+        log.info("[AGENT] Using move_task tool...")
+        client = _get_trello_client()
+
+        board = next((board for board in client.list_boards() if board.name == board_name), None)
+        if not board:
+            return f'Board "{board_name}" not found.'
+        
+        current_list = next((l for l in board.list_lists() if l.name == list_name), None)
+        if not current_list:
+            return f"Failed to find list {list_name}."
+        
+        card = client.get_card(card_id=card_id)
+        card.change_list(current_list.id)
+        
+        confirmation = f"""
+        Task moved to: {list_name}
+        Card Name: {card.name}
+        Description: {card.desc}
+        Due Date: {card.due}
+        """
+        return confirmation
+    except Exception as e:
+        log.error(f"Failed to move task: {e}", exc_info=True)
+        raise
+
+def archive_task(card_id: str) -> str:
+    """Archive a task from a list in Trello.
+    
+    Use this function to archive tasks across lists in a trello board.
+
+    Args
+        card_id: the card's unique identifier.
+    
+    Returns
+        confirmation (str): confirmation of archival. 
+    """
+    try:
+        log.info("[AGENT] Using archive_task tool...")
+        client = _get_trello_client()
+        
+        card = client.get_card(card_id=card_id)
+        card.set_closed(True)
+        
+        confirmation = f"""
+        Task archived:\n
+        - Card Name: {card.name}
+        - Description: {card.desc}
+        - Due Date: {card.due}
+        """
+        return confirmation
+    except Exception as e:
+        log.error(f"Failed to archive task: {e}", exc_info=True)
+        raise
+
+def complete_task(card_id: str) -> str:
+    """Complete a task from a list in Trello.
+    
+    Use this function to mark a task as complete.
+
+    Args
+        card_id: the card's unique identifier.
+    
+    Returns
+        confirmation (str): confirmation of task completion. 
+    """
+    try:
+        log.info("[AGENT] Using complete_task tool...")
+        client = _get_trello_client()
+        
+        card = client.get_card(card_id=card_id)
+        card.set_due_complete()
+        
+        confirmation = f"""
+        Task completed:\n
+        - Card Name: {card.name}
+        - Description: {card.desc}
+        - Due Date: {card.due}
+        """
+        return confirmation
+    except Exception as e:
+        log.error(f"Failed to complete task: {e}", exc_info=True)
         raise
 
 # TODO
